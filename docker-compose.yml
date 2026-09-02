@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  devsecops-db:
+    image: mysql:8.0
+    container_name: tatiana2
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-adminpassword}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-flaskdb}
+    volumes:
+      - tatiana-db-data:/var/lib/mysql
+    networks:
+      - red-tatiana
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  devsecops-api:
+    build: .
+    container_name: tatiana-flask-api
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: development
+      DB_HOST: tatiana2
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-adminpassword}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-flaskdb}
+    networks:
+      - red-tatiana
+    depends_on:
+      devsecops-db:
+        condition: service_healthy
+
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: tatianagit add .
+git commit -m "feat: estructura base del proyecto"
+git branch -M main
+git remote add origin https://github.com/TU_USUARIO/TU_REPOSITTORIO.git
+git push -u origin main-uptime-kuma
+    restart: always
+    ports:
+      - "3001:3001"
+    volumes:
+      - uptime-kuma-data:/app/data
+    networks:
+      - red-tatiana
+
+  dozzle:
+    image: amir20/dozzle:latest
+    container_name: tatiana-dozzle
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8080:8080"
+    networks:
+      - red-tatiana
+
+  nginx-proxy-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: tatiana-proxy-manager
+    restart: always
+    ports:
+      - "80:80"     # HTTP
+      - "81:81"     # Admin Web Nginx Proxy Manager
+      - "443:443"   # HTTPS
+    volumes:
+      - ./npm_data:/data
+      - ./npm_letsencrypt:/etc/letsencrypt
+    networks:
+      - red-tatiana
+    depends_on:
+      - tatiana-api
+
+networks:
+  red-tatiana:
+    name: red-tatiana
+
+volumes:
+  devsecops-db-data:
+    name: tatiana-db-data
+  uptime-kuma-data:
+    name: tatiana-uptime-kuma-data
