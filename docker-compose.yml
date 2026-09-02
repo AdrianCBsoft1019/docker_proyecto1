@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-  devsecops-db:
+  tatiana-db:
     image: mysql:8.0
     container_name: tatiana2
     restart: always
@@ -18,7 +16,7 @@ services:
       timeout: 5s
       retries: 5
 
-  devsecops-api:
+  tatiana-api:
     build: .
     container_name: tatiana-flask-api
     restart: always
@@ -38,10 +36,6 @@ services:
   uptime-kuma:
     image: louislam/uptime-kuma:1
     container_name: tatianagit add .
-git commit -m "feat: estructura base del proyecto"
-git branch -M main
-git remote add origin https://github.com/TU_USUARIO/TU_REPOSITTORIO.git
-git push -u origin main-uptime-kuma
     restart: always
     ports:
       - "3001:3001"
@@ -82,7 +76,7 @@ networks:
     name: red-tatiana
 
 volumes:
-  devsecops-db-data:
+  tatiana-db-data:
     name: tatiana-db-data
-  uptime-kuma-data:
+  tatiana-uptime-kuma-data:
     name: tatiana-uptime-kuma-data
