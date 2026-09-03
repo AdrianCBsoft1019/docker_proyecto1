@@ -35,7 +35,7 @@ services:
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
-    container_name: tatianagit add .
+    container_name: tatiana-uptime-kuma
     restart: always
     ports:
       - "3001:3001"
