@@ -30,7 +30,7 @@ services:
     networks:
       - red-tatiana
     depends_on:
-      devsecops-db:
+      tatiana-db:  # CORREGIDO: Apunta a tatiana-db
         condition: service_healthy
 
   uptime-kuma:
@@ -40,7 +40,7 @@ services:
     ports:
       - "3001:3001"
     volumes:
-      - uptime-kuma-data:/app/data
+      - tatiana-uptime-kuma-data:/app/data  
     networks:
       - red-tatiana
 
