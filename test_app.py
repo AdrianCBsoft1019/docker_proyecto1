@@ -4,3 +4,6 @@ def test_index_route():
     tester = app.test_client()
     response = tester.get('/')
     assert response.status_code in [200, 500]
+
+def test_ejemplo_exitoso():
+    assert True
